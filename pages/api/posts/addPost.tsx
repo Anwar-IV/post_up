@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
-import prisma from "../../../prisma/client";
+import { prisma } from "../../../prisma/client";
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,30 +21,37 @@ export default async function handler(
     if (title.length > 300) {
       return res
         .status(403)
-        .json(
-          "Length exceeded 300 characters. Please write a shorter response."
-        );
+        .json({
+          message:
+            "Length exceeded 300 characters. Please write a shorter response.",
+        });
     }
     if (!title.length) {
-      return res.status(403).json("Text body cannot be empty.");
+      return res.status(403).json({ message: "Text body cannot be empty." });
     }
 
     // Get User
     const prismaUser = await prisma.user.findUnique({
-      where: { email: session?.user?.email },
+      where: { email: session?.user?.email! },
     });
 
     // Create Post
     try {
-      const result = await prisma.post.create({
-        data: {
-          title,
-          userId: prismaUser.id,
-        },
-      });
-      res.status(200).json(result);
+      if (prismaUser) {
+        const result = await prisma.post.create({
+          data: {
+            title,
+            userId: prismaUser.id,
+          },
+        });
+        return res.status(200).json(result);
+      } else {
+        return res
+          .status(404)
+          .json({ message: "No user found with that email!" });
+      }
     } catch (error) {
-      res.status(403).json({ error: "Something went wrong!" });
+      res.status(403).json({ message: "Something went wrong!" });
     }
   }
 }

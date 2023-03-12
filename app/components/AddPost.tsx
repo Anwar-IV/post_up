@@ -1,25 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
+import toast from "react-hot-toast";
+let toastPostId: string;
 
 export default function CreatePost() {
   const [title, setTitle] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
-  const [error, setError] = useState("");
 
   // Create a Post
   const { mutate } = useMutation(
-    async (title: string) => await axios.post("/api/posts/addPost", { title }),
+    async (title: string) => await axios.post("/api/posts/addpost", { title }),
     {
       onError: (error: AxiosError) => {
-        console.log("The Error is -->", error);
-        setError(error?.response?.data as string);
+        const { message } = error.response?.data! as { message: string };
+        toast.error(message, { id: toastPostId });
         setIsDisabled(false);
       },
       onSuccess: (data) => {
-        console.log("The data returned is -->", data);
+        toast.success("Post uploaded successfully! 🔥", { id: toastPostId });
         setTitle("");
         setIsDisabled(false);
       },
@@ -28,7 +29,7 @@ export default function CreatePost() {
 
   const submitPost = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
+    toastPostId = toast.loading("Creating the Post... 🚀", { id: toastPostId });
     setIsDisabled(true);
     mutate(title);
   };
@@ -36,14 +37,9 @@ export default function CreatePost() {
   return (
     <form
       onSubmit={submitPost}
-      className="bg-gray-200 my-8 p-8 shadow-md rounded-md"
+      className="bg-gray-200 my-8 p-8 shadow-md rounded-md max-w-3xl m-auto"
     >
       <div className="flex flex-col my-4">
-        {error && (
-          <div className="self-center">
-            <p className="text-red-400 font-bold">{error}</p>
-          </div>
-        )}
         <textarea
           name="title"
           value={title}
@@ -63,7 +59,7 @@ export default function CreatePost() {
           className="text-sm bg-teal-600 text-white py-2 px-6 rounded-xl shadow-lg disabled:opacity-25 hover:scale-[1.02] active:scale-[.98] transition-scale duration-500"
           type="submit"
         >
-          Create a Post
+          Upload Post
         </button>
       </div>
     </form>
