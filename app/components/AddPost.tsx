@@ -37,7 +37,7 @@ export default function CreatePost() {
   return (
     <form
       onSubmit={submitPost}
-      className="bg-gray-200 my-8 p-8 shadow-md rounded-md max-w-3xl m-auto"
+      className="bg-gray-200 my-8 p-8 shadow-md rounded-md max-w-2xl m-auto"
     >
       <div className="flex flex-col my-4">
         <textarea

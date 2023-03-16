@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`mx-4 md:mx-36 xl:mx-88 ${roboto.variable} bg-gray-400`}>
+      <body className={`mx-4 min-[890px]:mx-16 min-[915px]:mx-36 xl:mx-80 ${roboto.variable} bg-gray-400`}>
         <QueryWrapper>
         <Nav />
         <Toasty/>
