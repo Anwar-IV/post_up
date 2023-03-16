@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { PostType } from "../types/PostType";
 
 type PostProps = {
   id: string;

@@ -12,7 +12,7 @@ export default async function Nav() {
     <nav className="flex justify-between py-8">
       <div className="flex flex-col gap-2">
         <Link href={"/"} className="self-center m-0 p-0">
-          <div className="flex flex-col self-center cursor-pointer hover:shadow-[0_0_3px_1px_rgba(100,200,255,.8)] transition-shadow ease-in-out duration-500 w-max h-max p-3 shadow-[0_0_3px_1px_rgba(0,0,0,.5)] rounded-md ml-2">
+          <div className="flex flex-col self-center cursor-pointer hover:shadow-[0_0_3px_1px_rgba(70,130,190,.8)] transition-shadow ease-in-out duration-500 w-max h-max p-3 shadow-[0_0_3px_1px_rgba(0,0,0,.5)] rounded-md ml-2">
             <Image
               width={30}
               height={30}
