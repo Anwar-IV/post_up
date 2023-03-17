@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { UserPost } from "../types/UserPostType";
-import EditablePost from "./EditPost";
+import EditablePost from "./EditablePost";
 
 const fetchUserPost = async () => {
   const response = await axios.get("/api/posts/getpost");
