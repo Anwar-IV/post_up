@@ -7,6 +7,7 @@ import { useState } from "react";
 import { MdDeleteForever } from "react-icons/md";
 import Blackout from "./Blackout";
 import toast from "react-hot-toast";
+import Link from "next/link";
 let toastPostId: string;
 
 type EditableProps = {
@@ -71,9 +72,11 @@ export default function EditablePost({
           <p className="break-all">{title}</p>
         </div>
         <div className="flex justify-between items-center">
-          <p className="text-sm font-bold text-gray-700">
-            {comments?.length} Comments
-          </p>
+          <Link href={`/post/${id}`}>
+            <p className="text-sm font-bold text-gray-700">
+              {comments?.length} Comments
+            </p>
+          </Link>
           <button
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}

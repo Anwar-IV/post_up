@@ -17,7 +17,10 @@ export default function UsersPost() {
   });
   if (isLoading)
     return <p className="text-center mt-8 text-lg"> Loading Posts...</p>;
-  console.log(data);
+  if (!data?.posts.length)
+    return (
+      <p className="text-center mt-8 text-lg"> You currently have no posts.</p>
+    );
   return (
     <div>
       {data?.posts.map((post) => (

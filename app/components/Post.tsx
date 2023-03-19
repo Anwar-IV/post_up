@@ -14,6 +14,7 @@ type PostProps = {
     postId: string;
     userId: string;
   }[];
+  width: string;
 };
 
 export default function Post({
@@ -22,9 +23,10 @@ export default function Post({
   postTitle,
   id,
   comments,
+  width,
 }: PostProps) {
   return (
-    <div className="bg-gray-200 my-8 p-8 rounded-lg max-w-3xl mx-auto">
+    <div className={`bg-gray-200 my-8 p-8 rounded-lg ${width} mx-auto`}>
       <div className="flex items-center gap-2">
         <Image
           className="rounded-full"
