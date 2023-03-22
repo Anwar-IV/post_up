@@ -30,6 +30,7 @@ export default function Home() {
             avatar={post.user.image}
             postTitle={post.title}
             comments={post?.comments!}
+            likes={post.likes}
             width="max-w-3xl"
           />
         ))}

@@ -19,11 +19,13 @@ export default async function handler(
           id,
         },
       });
+      console.log("result -->", result);
       res.status(200).json(result);
     } catch (error) {
+      console.log(error);
       res
         .status(403)
-        .json({ error: "An error has occured whilst deleting a post." });
+        .json({ error: "An error has occured whilst deleting the post." });
     }
   }
 }

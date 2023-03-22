@@ -31,6 +31,7 @@ export default function UsersPost() {
           id={post.id}
           title={post.title}
           comments={post.comments}
+          likes={post.likes}
         />
       ))}
     </div>

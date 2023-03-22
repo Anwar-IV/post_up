@@ -8,12 +8,14 @@ import { MdDeleteForever } from "react-icons/md";
 import Blackout from "./Blackout";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import { AiFillHeart } from "react-icons/ai";
 let toastPostId: string;
 
 type EditableProps = {
   id: string;
   avatar: string;
   name: string;
+  likes: { postId: string; userId: string }[];
   title: string;
   comments?: {
     id: string;
@@ -26,11 +28,13 @@ export default function EditablePost({
   avatar,
   name,
   title,
+  likes,
   comments,
   id,
 }: EditableProps) {
   const [hovering, setHovering] = useState(false);
   const [blackout, setBlackout] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
   const queryClient = useQueryClient();
   // Delete Post
   const { mutate } = useMutation(
@@ -72,11 +76,24 @@ export default function EditablePost({
           <p className="break-all">{title}</p>
         </div>
         <div className="flex justify-between items-center">
-          <Link href={`/post/${id}`}>
-            <p className="text-sm font-bold text-gray-700">
-              {comments?.length} Comments
-            </p>
-          </Link>
+          <div className="flex gap-4 items-center">
+            <Link href={`/post/${id}`}>
+              <p className="text-sm font-bold text-gray-700">
+                {comments?.length} Comments
+              </p>
+            </Link>
+            <div className="flex items-center gap-1">
+              <p className="font-bold text-gray-700 w-5 text-right">
+                {likes.length}
+              </p>
+              <button
+                className="disabled:opacity-60 pointer-events-none cursor-auto"
+                disabled={isDisabled}
+              >
+                <AiFillHeart className="text-red-500" size={24} />
+              </button>
+            </div>
+          </div>
           <button
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}

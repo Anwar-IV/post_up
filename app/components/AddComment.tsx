@@ -20,13 +20,15 @@ export default function AddComment({ id }: AddCommentProps) {
     {
       onSuccess: (data) => {
         toast.success("Comment added successfully!", { id: commentToastId });
-        queryClient.invalidateQueries(["post-detail"]);
+        queryClient.invalidateQueries(["posts", id]);
         setTitle("");
         setIsDisabled(false);
       },
-      onError: (error: AxiosError) => {
-        const { message } = error.response?.data as { message: string };
-        toast.error(message, { id: commentToastId });
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          const { message } = error.response?.data as { message: string };
+          toast.error(message, { id: commentToastId });
+        }
         setIsDisabled(false);
       },
     }

@@ -8,6 +8,10 @@ export type UserPost = {
     createdAt: string;
     title: string;
     userId: string;
+    likes: {
+      postId: string;
+      userId: string;
+    }[];
     comments?: {
       id: string;
       text: string;

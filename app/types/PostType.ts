@@ -1,6 +1,10 @@
 export type PostType = {
   id: string;
   title: string;
+  likes: {
+    postId: string;
+    userId: string;
+  }[];
   createdAt: Date;
   updatedAt: Date;
   user: {

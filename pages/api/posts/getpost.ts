@@ -24,6 +24,7 @@ export default async function handler(
             },
             include: {
               comments: true,
+              likes: true,
             },
           },
         },
