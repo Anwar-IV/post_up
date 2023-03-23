@@ -6,7 +6,7 @@ import { useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 type PostProps = {
   id: string;
@@ -49,7 +49,9 @@ export default function Post({
       },
       onError: (error) => {
         console.error(error);
-        toast.error("Something went wrong!");
+        if (error instanceof AxiosError) {
+          toast.error(error.response?.data);
+        }
         setIsDisabled(false);
       },
     }

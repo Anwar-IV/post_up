@@ -24,7 +24,7 @@ export default async function handler(
       if (!session)
         return res
           .status(401)
-          .json({ message: "You need to be signed in to make a post!" });
+          .json({ message: "Please sign in to leave a comment!" });
 
       //Get the User
       const user = await prisma.user.findUnique({

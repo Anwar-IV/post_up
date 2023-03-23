@@ -9,10 +9,7 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     const session = await getServerSession(req, res, authOptions);
-    if (!session)
-      return res
-        .status(403)
-        .json({ message: "Please sign in to like a post." });
+    if (!session) return res.status(403).json("Please sign in to like a post.");
 
     // Get User
     try {
