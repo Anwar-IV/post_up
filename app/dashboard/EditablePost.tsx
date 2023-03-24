@@ -9,6 +9,7 @@ import Blackout from "./Blackout";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { AiFillHeart } from "react-icons/ai";
+import { FiEdit } from "react-icons/fi";
 let toastPostId: string;
 
 type EditableProps = {
@@ -32,31 +33,32 @@ export default function EditablePost({
   comments,
   id,
 }: EditableProps) {
-  const [hovering, setHovering] = useState(false);
-  const [blackout, setBlackout] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [delHovering, setDelHovering] = useState(false);
+  const [editHovering, setEditHovering] = useState(false);
+  const [deleteBlackout, setDeleteBlackout] = useState(false);
+  const [editBlackout, setEditBlackout] = useState(false);
+
   const queryClient = useQueryClient();
   // Delete Post
-  const { mutate } = useMutation(
-    async (id: string) =>
-      await axios.delete("/api/posts/deletepost", { data: id }),
-    {
-      onError: (error) => {
-        toast.error("Error occured whilst deleting post!", {
-          id: toastPostId,
-        });
-      },
-      onSuccess: (data) => {
-        toast.success("Post deleted successfully!", { id: toastPostId });
-        queryClient.invalidateQueries(["user-post"]);
-        setBlackout(false);
-      },
-    }
-  );
+  const deleteFn = async (id: string) =>
+    await axios.delete("/api/posts/deletepost", { data: id });
+  const deleteMut = useMutation({
+    mutationFn: deleteFn,
+    onError: (error) => {
+      toast.error("Error occured whilst deleting post!", {
+        id: toastPostId,
+      });
+    },
+    onSuccess: (data) => {
+      toast.success("Post deleted successfully!", { id: toastPostId });
+      queryClient.invalidateQueries(["user-post"]);
+      setDeleteBlackout(false);
+    },
+  });
 
   const deletePost = () => {
-    toastPostId = toast.loading("Deleting the Post...", { id: toastPostId });
-    mutate(id);
+    toastPostId = toast.loading("Deleting Post...", { id: toastPostId });
+    deleteMut.mutate(id);
   };
 
   return (
@@ -86,30 +88,53 @@ export default function EditablePost({
               <p className="font-bold text-gray-700 w-5 text-right">
                 {likes.length}
               </p>
-              <button
-                className="disabled:opacity-60 pointer-events-none cursor-auto"
-                disabled={isDisabled}
-              >
+              <button className="disabled:opacity-60 pointer-events-none cursor-auto">
                 <AiFillHeart className="text-red-500" size={24} />
               </button>
             </div>
           </div>
-          <button
-            onMouseEnter={() => setHovering(true)}
-            onMouseLeave={() => setHovering(false)}
-            onClick={() => setBlackout(true)}
-            className=" w-max h-max border-2 border-red-400 p-[4px] rounded-md hover:bg-red-400 active:scale-95 transition-scale duration-300"
-          >
-            <MdDeleteForever
-              size={24}
-              color={hovering ? "white" : "rgb(248,113,113)"}
-            />
-          </button>
+          <div className="flex gap-3">
+            <button
+              onMouseEnter={() => setEditHovering(true)}
+              onMouseLeave={() => setEditHovering(false)}
+              onClick={() => setEditBlackout(true)}
+              className=" w-max h-max border-2 border-slate-600 p-[6px] rounded-md hover:bg-slate-600 active:scale-95 transition-scale duration-300"
+            >
+              <FiEdit
+                size={20}
+                color={editHovering ? "white" : "rgb(71,85,105)"}
+              />
+            </button>
+
+            <button
+              onMouseEnter={() => setDelHovering(true)}
+              onMouseLeave={() => setDelHovering(false)}
+              onClick={() => setDeleteBlackout(true)}
+              className=" w-max h-max border-2 border-red-400 p-[4px] rounded-md hover:bg-red-400 active:scale-95 transition-scale duration-300"
+            >
+              <MdDeleteForever
+                size={24}
+                color={delHovering ? "white" : "rgb(248,113,113)"}
+              />
+            </button>
+          </div>
         </div>
       </div>
-      {blackout && (
-        <Blackout deletePost={deletePost} setBlackout={setBlackout} />
-      )}
+      {deleteBlackout ? (
+        <Blackout
+          id={id}
+          deletePost={deletePost}
+          setBlackout={setDeleteBlackout}
+          variant={"delete"}
+        />
+      ) : editBlackout ? (
+        <Blackout
+          id={id}
+          setBlackout={setEditBlackout}
+          variant={"edit"}
+          title={title}
+        />
+      ) : null}
     </>
   );
 }

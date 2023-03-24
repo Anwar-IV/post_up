@@ -24,6 +24,7 @@ export default function SignOut({ image }: SignOutProps) {
             width={64}
             height={64}
             src={image}
+            className="hover:scale-95 active:scale-90 transition-scale duration-500"
             alt="The users profile picture."
           />
         ) : (
